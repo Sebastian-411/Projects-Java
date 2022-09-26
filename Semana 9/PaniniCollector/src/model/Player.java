@@ -6,15 +6,15 @@ public class Player {
 	private String lastName;
 	private String collectionId;
 	private int shirtNumber;
-	private String playerPosition;
+	private Positions playerPosition;
 
-	public Player(String name, String lastName, String id, int shirtNumber, String playerPosition) {
+	public Player(String name, String lastName, String id, int shirtNumber, int playerPosition) {
 
 		this.name = name;
 		this.lastName = lastName;
 		this.collectionId = id;
 		this.shirtNumber = shirtNumber;
-		this.playerPosition = playerPosition;
+		this.playerPosition = Positions.values()[playerPosition];
 	}
 
 	public String getName() {
