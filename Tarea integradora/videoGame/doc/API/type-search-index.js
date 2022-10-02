@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"model","l":"DifficultLevel"},{"p":"model","l":"Enemy"},{"p":"model","l":"Level"},{"p":"model","l":"Player"},{"p":"model","l":"Quality"},{"p":"model","l":"Treasure"},{"p":"model","l":"TypesEnemies"},{"p":"model","l":"VideoGameController"},{"p":"ui","l":"VideoGameManager"}]
