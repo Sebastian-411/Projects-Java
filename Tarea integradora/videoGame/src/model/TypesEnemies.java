@@ -1,2 +1,5 @@
-package model;public enum TypesEnemies {
+package model;
+
+public enum TypesEnemies {
+    OGRES, ABSTRACTS, BOSSES, MAGIC
 }
