@@ -9,6 +9,12 @@ public class UserContentCreator extends UserProducer{
         super(name, id, date, url);
         podcasts = new ArrayList<Podcast>();
     }
+
+    /** Description:
+     *          This method will take care of adding a podcast to the user.
+     * @param podcast Podcast: Podcast to add
+     * @return status boolean: Process status
+     */
     public boolean addPodcast(Podcast podcast){
         return podcasts.add(podcast);
     }

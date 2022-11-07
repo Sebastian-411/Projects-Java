@@ -20,6 +20,13 @@ public class NeoTunesController {
 
     }
 
+    /** Description:
+     *         This method will take care of receiving the user information and create a user from it.
+     * @param name String: user's name
+     * @param id String: personal user id
+     * @param selection int: type of user to register
+     * @return boolean: User creation status
+     */
     public boolean registerUser(String name, String id, int selection){
         switch (selection){
             case 1:
@@ -30,6 +37,15 @@ public class NeoTunesController {
                 return false;
         }
     }
+
+    /** Description:
+     * This method will be responsible for receiving the user information and creating a user from it.
+     * @param name String: user's name
+     * @param id String: user's personal identifier.
+     * @param url String: text string: Url of the user's photo.
+     * @param selection int: type of user to register
+     * @return boolean: type of user to register User creation state
+     */
     public boolean registerUser(String name, String id, String url, int selection){
         switch (selection){
             case 1:
@@ -41,6 +57,17 @@ public class NeoTunesController {
         }
     }
 
+    /** Description:
+     *         This method will be responsible for receiving the user information and creating an audio from it.
+     * @param selection int: User who produces the audio
+     * @param name int: audio name
+     * @param album String: album name
+     * @param genre int: audio genre position
+     * @param url String: photo url
+     * @param duration int: audio duration
+     * @param price double: audio price
+     * @return boolean: audio registration status
+     */
     public boolean registerAudio(int selection, String name, String album, int genre, String url, double duration, double price){
         Song temp = new Song(name, album, Genre.values()[genre-1], url, duration, price);
         if(!(producers.get(selection-1) instanceof UserArtist)){
@@ -49,6 +76,25 @@ public class NeoTunesController {
         return audios.add(temp)||(((UserArtist) producers.get(selection-1)).addSong(temp));
     }
 
+    /**
+     * @param selection
+     * @param name
+     * @param description
+     * @param category
+     * @param url
+     * @param duration
+     * @return
+     */
+    /** Description:
+     *         This method will be responsible for receiving the user information and creating an audio from it.
+     * @param selection int: User who produces the audio
+     * @param name int: audio name
+     * @param description String: description
+     * @param category int: audio category position
+     * @param url String: photo url
+     * @param duration int: audio duration
+     * @return boolean: audio registration status
+     */
     public boolean registerAudio(int selection, String name, String description, int category, String url, double duration){
         Podcast temp = new Podcast(name, description, Category.values()[category-1], url, duration);
         if(!(producers.get(selection-1) instanceof UserContentCreator)){
@@ -57,6 +103,11 @@ public class NeoTunesController {
         return audios.add(temp)||(((UserContentCreator) producers.get(selection-1)).addPodcast(temp));
     }
 
+    /** Description:
+     *      This method will tell if a user is able to create a playlist.
+     * @param selection int: User to analyze
+     * @return boolean: status of ability to save a playlist
+     */
     public boolean canCreatePlaylist(int selection){
         switch ((consumers.get(selection-1) instanceof UserPremium) ? 1 : (consumers.get(selection-1) instanceof UserStandard) ? 2 : 3){
             case 1:
@@ -72,6 +123,10 @@ public class NeoTunesController {
         return false;
     }
 
+    /** Description:
+     *         This method creates a matrix in a random order.
+     * @return matrix int[][]: generated matrix
+     */
     public int[][] generateMatriz(){
         int rows = 6;
         int columns = 6;
@@ -84,6 +139,13 @@ public class NeoTunesController {
         return tmp;
     }
 
+    /** Description:
+     *        This method will create a playlist.
+     * @param selection int: User who will make the playlist
+     * @param name String: nombre de la playlist
+     * @param selections Arraylist<Integer>: selected songs
+     * @return msg String: in case the creation has been successful, it will show the created code and its array. In the opposite case, it will not show anything.
+     */
     public String registerPlayList(int selection, String name, ArrayList<Integer> selections){
         ArrayList<Audio> temp = new ArrayList<>();
         boolean hasSong = false;
@@ -108,6 +170,12 @@ public class NeoTunesController {
         }
     }
 
+    /** Description:
+     *          This method will create the code for a playlist.
+     * @param caseCode int: case of code generation
+     * @param tmp int[][]: matrix to extract the code
+     * @return code String: generated code
+     */
     public String generateCodePlaylist(int caseCode,int[][] tmp){
         String msg = "";
         switch (caseCode){
@@ -149,6 +217,12 @@ public class NeoTunesController {
         }
         return msg;
     }
+
+    /** Description:
+     *         this method will be in charge of generating a string in the order of a given matrix
+     * @param tmp int[][]:
+     * @return msg String; array to extract information
+     */
     public String getMatriz(int[][] tmp){
         String msg = "";
         for (int i = 0; i < tmp.length; i++) { // filas numbers.length
@@ -159,6 +233,11 @@ public class NeoTunesController {
         }
         return msg;
     }
+
+    /** Description:
+     *      this method will be in charge of generating a list string of all the consuming users.
+     * @return msg String: list string of all the consuming users.
+     */
     public String getAllUserConsumers(){
         String msg = "";
         for(int i = 0; i<consumers.size(); i++){
@@ -186,6 +265,10 @@ public class NeoTunesController {
         return msg;
     }
 
+    /** Description:
+     *      this method will be in charge of generating a list string of all the artist users.
+     * @return msg String: list string of all the artist users.
+     */
     public String getAllArtist(){
         String msg = "";
         for(int i = 0; i<producers.size(); i++){
@@ -196,6 +279,10 @@ public class NeoTunesController {
         return msg;
     }
 
+    /** Description:
+     *      this method will be in charge of generating a list string of all the content creator users.
+     * @return msg String: list string of all the content creator users.
+     */
     public String getAllContentCreator(){
         String msg = "";
         for(int i = 0; i<producers.size(); i++){
@@ -205,6 +292,11 @@ public class NeoTunesController {
         }
         return msg;
     }
+
+    /** Description:
+     *      this method will be in charge of generating a list string of all the genres.
+     * @return msg String: list string of all the genres.
+     */
     public String getGenre(){
         String msg = "";
         for(int i = 0; i< Genre.values().length; i++){
@@ -213,6 +305,10 @@ public class NeoTunesController {
         return msg;
     }
 
+    /** Description:
+     *      this method will be in charge of generating a list string of all the category.
+     * @return msg String: list string of all the category.
+     */
     public String getCategory(){
         String msg = "";
         for(int i = 0; i< Category.values().length; i++){
@@ -221,6 +317,10 @@ public class NeoTunesController {
         return msg;
     }
 
+    /** Description:
+     *      this method will be in charge of generating a list string of all the songs.
+     * @return msg String: list string of all the songs.
+     */
     public String getAllSongs(){
         String msg = "";
         for(int i = 0; i<audios.size(); i++){
@@ -231,6 +331,11 @@ public class NeoTunesController {
         return msg;
     }
 
+
+    /** Description:
+     *      this method will be in charge of generating a list string of all the podcast.
+     * @return msg String: list string of all the podcast.
+     */
     public String getAllPodcast(){
         String msg = "";
         for(int i = 0; i<audios.size(); i++){
@@ -242,6 +347,10 @@ public class NeoTunesController {
         return msg;
     }
 
+    /** Description:
+     *      This method will generate a list string of all the playlists of a user.
+     * @return msg String: list string of all he playlists of a user.
+     */
     public String getUserPlaylists(int selection){
         String msg = "";
         if(consumers.get(selection-1) instanceof UserPremium){
@@ -261,6 +370,12 @@ public class NeoTunesController {
         return msg;
     }
 
+    /** Description:
+     *          This method will take care of getting the code of a playlist.
+     * @param selection int: user who has the playlist
+     * @param selection1 int: Playlist
+     * @return code String: playlist's code
+     */
     public String getUserPlaylistCode(int selection, int selection1){
         String msg = "";
         if(consumers.get(selection-1) instanceof UserPremium){
@@ -273,6 +388,11 @@ public class NeoTunesController {
         return msg;
     }
 
+    /** Description:
+     *         This method will search for a palylist with a given code.
+     * @param code String: playlist code
+     * @return
+     */
     public String getPlaylistToCode(String code){
         String msg = "";
         for  (int i = 0; i<consumers.size(); i++){
@@ -283,7 +403,7 @@ public class NeoTunesController {
                             return getUserPlaylist((i + 1), (j + 1));
                         }
                     } else {
-                        return "";
+                        return "Playlist not found";
                     }
             }
             if(consumers.get(i) instanceof UserPremium){
@@ -293,9 +413,15 @@ public class NeoTunesController {
                     }
             }
         }
-        return msg = "";
+        return msg = "Playlist not found";
     }
 
+    /** Description:
+     *          This method will be in charge of obtaining the information of a user's playlist.
+     * @param selection int: user who has the playlist
+     * @param selection1 int: Playlist
+     * @return msg String: audios of the playlist
+     */
     public String getUserPlaylist(int selection, int selection1){
         String msg = "";
         if(consumers.get(selection-1) instanceof UserPremium){
@@ -315,6 +441,13 @@ public class NeoTunesController {
         return msg;
     }
 
+    /** Description:
+     *          This method will remove an audio from the playlist.
+     * @param selection int: user who has the playlist
+     * @param selection1 int: Playlist
+     * @param selection2 int: audio to delete
+     * @return status boolean: Deleted status
+     */
     public boolean deleteAudioPlaylist(int selection, int selection1, int selection2){
         if(consumers.get(selection-1) instanceof UserPremium){
             if(((UserPremium) consumers.get(selection-1)).getPlaylists().get(selection1-1).getAudios().isEmpty()){
@@ -333,6 +466,13 @@ public class NeoTunesController {
         return false;
     }
 
+    /** Description:
+     *          This method will add audios to a playlist.
+     * @param selection int: user who has the playlist
+     * @param selection1 int: Playlist
+     * @param selections int: audios to add
+     * @return status boolean: Add status
+     */
     public boolean registerAudiotoPlaylist(int selection, int selection1, ArrayList<Integer> selections){
         ArrayList<Audio> tmp;
         boolean hasSong = false;
@@ -363,6 +503,13 @@ public class NeoTunesController {
         return temp;
     }
 
+    /** Description:
+     *      This method will rename a playlist.
+     * @param selection int: user who has the playlist
+     * @param selection1 int: Playlist
+     * @param rename String: new name
+     * @return status boolean: rename Status
+     */
     public boolean renamePlaylist(int selection, int selection1, String rename){
         if(consumers.get(selection-1) instanceof UserPremium){
             return ((UserPremium) consumers.get(selection - 1)).getPlaylists().get(selection1 - 1).setName(rename);

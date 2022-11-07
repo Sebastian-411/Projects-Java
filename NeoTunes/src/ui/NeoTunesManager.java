@@ -18,6 +18,11 @@ public class NeoTunesManager {
         NeoTunesManager manager = new NeoTunesManager();
         manager.menu();
     }
+
+    /**
+     * Description:
+     *      This method will be in charge of show the menu, receive the user's answers and redirect the user according to his answers.
+     */
     public void menu(){
         while(true) {
             System.out.println("Welcome to NeoTune"
@@ -49,6 +54,9 @@ public class NeoTunesManager {
         }
     }
 
+    /** Description:
+     *      This method will process the request to share a playlist, either get the code to share it or search for a playlist by entering the code, it is important to know that this only allows you to view the playlist.
+     */
     public void sharePlaylist(){
         System.out.println("What could we help you?"
                 + "\n 1. Share a playlist"
@@ -76,6 +84,10 @@ public class NeoTunesManager {
         }
         menu();
     }
+
+    /** Description:
+     *      This method will process the request to edit a playlist, the capabilities with this method allow you to delete an audio, add an audio or rename a playlist
+     */
     public void editPlaylist(){
         if(!controller.getAllUserConsumers().equals("")){
             System.out.println("Please, select the user that make this playlist");
@@ -152,7 +164,8 @@ public class NeoTunesManager {
                                 } else {
                                     control = false;
                                     if (controller.registerAudiotoPlaylist(selection, selection1, selections)){
-                                        System.out.println("The song was added successfully");
+                                        System.out.println("The audio was added successfully" +
+                                                "\n The playlist's code has been changed");
                                     } else {
                                         System.out.println("An error has occurred, try again later");
                                     }
@@ -177,6 +190,9 @@ public class NeoTunesManager {
         }
     }
 
+    /** Description:
+     *          This method will allow the creation of a playlist, that is it will receive the information given by the user. and assign it directly to a consumer user.
+     */
     public void createPlaylist(){
         if(!controller.getAllUserConsumers().equals("") && !controller.getAllSongs().equals("")){
             ArrayList<Integer> selections = new ArrayList<Integer>();
@@ -252,6 +268,10 @@ public class NeoTunesManager {
             menu();
         }
     }
+
+    /** Description:
+     *          This method will take care of the creation of an audio will receive the information given by the user. and redirects it according to your selection.
+     */
     public void registerAudio(){
             System.out.println("What type of user do you want to register? "
                     + "\n 1. Register a song"
@@ -271,6 +291,9 @@ public class NeoTunesManager {
             }
     }
 
+    /** Description:
+     *          This method will take care of the creation of a song will receive the information given by the user. and assign it directly to a user artist.
+     */
     public void registerSong(){
         if(!(controller.getAllArtist().equals(""))){
             System.out.println("Please, select the artist that make this song");
@@ -302,6 +325,9 @@ public class NeoTunesManager {
         }
     }
 
+    /** Description:
+     *          This method will take care of the creation of a podcast will receive the information given by the user. and assign it directly to a user content creator.
+     */
     public void registerPodcast(){
         if(!(controller.getAllContentCreator().equals(""))){
             System.out.println("Please, select the content creator that make this podcast");
@@ -331,6 +357,9 @@ public class NeoTunesManager {
         }
     }
 
+    /** Description:
+     *          This method will handle the creation of a user, receive the information given by the user. and redirects it according to their selection.
+     */
     public void registerUser(){
             System.out.println("What type of user do you want to register? "
                     + "\n 1. User Consumer"
@@ -349,6 +378,10 @@ public class NeoTunesManager {
                     System.out.println("Enter a valid option");
             }
     }
+
+    /** Description:
+     *       This method will take care of the creation of a consumer user, it will receive the information given by the user to create a new user
+     */
     public void registerConsumer(){
         System.out.println("What type of user consumer do you want to register? "
                 + "\n 1. Standard User"
@@ -369,6 +402,9 @@ public class NeoTunesManager {
         }
     }
 
+    /** Description:
+     *          This method will handle the creation of a producer user, it will receive the information given by the user to create a new user.
+     */
     public void registerProducer(){
         System.out.println("What type of user consumer do you want to register? "
                 + "\n 1. Artist User"
@@ -391,6 +427,10 @@ public class NeoTunesManager {
         }
     }
 
+    /** Description:
+     *          This method will help us to obtain an integer numerical answer.
+     * @return intAnswer int: Integer answer
+     */
     public int intAnswer(){
         while(true) {
             try {
@@ -401,6 +441,10 @@ public class NeoTunesManager {
         }
     }
 
+    /** Description:
+     *          This method will help us to obtain an Double  numerical answer.
+     * @return doubleAnswer int: Double  answer
+     */
     public double doubleAnswer(){
         while(true) {
             try {

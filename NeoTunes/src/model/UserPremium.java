@@ -20,6 +20,11 @@ public class UserPremium extends UserConsumer{
         this.purchases = purchases;
     }
 
+
+    /** Description:
+     *          This method will take care of return the playlists of the user.
+     * @return playlists Playlist: User playlists.
+     */
     public ArrayList<Playlist> getPlaylists() {
         return playlists;
     }
@@ -28,6 +33,12 @@ public class UserPremium extends UserConsumer{
         this.playlists = playlists;
     }
 
+
+    /** Description:
+     *          This method will take care of adding a playlist to the user.
+     * @param playlist Playlist: playlist to add
+     * @return status boolean: Process status
+     */
     public boolean addPlaylist(Playlist playlist) {
         return playlists.add(playlist);
     }

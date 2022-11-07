@@ -28,6 +28,11 @@ public class UserStandard extends UserConsumer implements Advertisable{
         this.playlists = playlists;
     }
 
+    /** Description:
+     *          This method will take care of adding a playlist to the user.
+     * @param playlist Playlist: playlist to add
+     * @return status boolean: Process status
+     */
     public boolean addPlaylist(Playlist playlist) {
         for(int i =  0; i<playlists.length; i++){
             if(playlists[i]==null){
@@ -38,6 +43,12 @@ public class UserStandard extends UserConsumer implements Advertisable{
         return false;
     }
 
+
+    /** Description:
+     *          This method will take care of return a playlist of the user.
+     * @param selection int: playlist to return
+     * @return playlists Playlist: Playlist selected.
+     */
     public Playlist getPlaylist(int selection) {
         return playlists[selection];
     }
