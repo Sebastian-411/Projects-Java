@@ -1,7 +1,7 @@
 package model;
 
 public interface Playable {
-    String reproduce();
+    String reproduce(Reproducible audio);
     boolean addPlaylist(Playlist playlist);
     // Boolean buySong(Song song);
 }

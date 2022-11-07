@@ -31,7 +31,8 @@ public class NeoTunesManager {
                     + "\n 2. Register an audio"
                     + "\n 3. Create a playlist"
                     + "\n 4. Edit a playlist"
-                    + "\n 5. Share a playlist");
+                    + "\n 5. Share a playlist"
+                    + "\n 6. Simulate the playing of a song or podcast");
             switch (intAnswer()){
                 case 1:
                     registerUser();
@@ -48,9 +49,52 @@ public class NeoTunesManager {
                 case 5:
                     sharePlaylist();
                     break;
+                case 6:
+                    simulatePlaying();
+                    break;
                 case 7:
                     System.exit(0);
             }
+        }
+    }
+
+
+    public void simulatePlaying(){
+        System.out.println("Please, select the user that will reproduce");
+        if(!controller.getAllUserConsumers().equals("")){
+            System.out.println(controller.getAllUserConsumers());
+            int selection = intAnswer();
+            String msg = "";
+            System.out.println("Please, enter the audio that will be reproduced"
+                    + "\n 1. Song"
+                    + "\n 2. Podcast"
+                    + "\n 3. Menu");
+            switch (intAnswer()) {
+                case 1:
+                    msg = controller.getAllSongs();
+                    if ( msg.equals("") ){
+                        System.out.println("Please, register a song");
+                        menu();
+                    }
+                    break;
+                case 2:
+                    msg = controller.getAllPodcast();
+                    if ( msg.equals("") ){
+                        System.out.println("Please, register a podcast");
+                        menu();
+                    }
+                    break;
+                case 3:
+                    menu();
+                    break;
+                default:
+                    System.out.println("Please, enter a valid option");
+            }
+            System.out.println(msg);
+            int selection1 = intAnswer();
+            System.out.println(controller.reproduceAudio(selection, selection1));
+        } else{
+            System.out.println("Please, register an user");
         }
     }
 
@@ -64,15 +108,19 @@ public class NeoTunesManager {
         switch (intAnswer()){
             case 1:
                 System.out.println("Please, select the user that will share the playlist");
-                System.out.println(controller.getAllUserConsumers());
-                int selection = intAnswer();
-                if(controller.getUserPlaylists(selection).equals("")){
-                    System.out.println("The user has no playlist");
-                } else {
-                    System.out.println(controller.getUserPlaylists(selection));
-                    System.out.println("Please, select the playlist");
-                    int selection1 = intAnswer();
-                    System.out.println(controller.getUserPlaylistCode(selection, selection1));
+                if(!controller.getAllUserConsumers().equals("")){
+                    System.out.println(controller.getAllUserConsumers());
+                    int selection = intAnswer();
+                    if ( controller.getUserPlaylists(selection).equals("") ){
+                        System.out.println("The user has no playlist");
+                    } else {
+                        System.out.println(controller.getUserPlaylists(selection));
+                        System.out.println("Please, select the playlist");
+                        int selection1 = intAnswer();
+                        System.out.println(controller.getUserPlaylistCode(selection, selection1));
+                    }
+                } else{
+                    System.out.println("Please, register an user");
                 }
                 break;
             case 2:

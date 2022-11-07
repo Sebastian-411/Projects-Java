@@ -15,7 +15,7 @@ public class NeoTunesController {
         consumers = new ArrayList<UserConsumer>();
         producers = new ArrayList<UserProducer>();
         audios = new ArrayList<Audio>();
-        consumers.add(new UserPremium("Juan", "222", new Date()));
+        consumers.add(new UserStandard("Juan", "222", new Date()));
         producers.add(new UserArtist("Juan", "222", new Date(), "asdasdas"));
 
     }
@@ -518,6 +518,10 @@ public class NeoTunesController {
             return ((UserStandard) consumers.get(selection - 1)).getPlaylists()[selection1 - 1].setName(rename);
         }
         return false;
+    }
+
+    public String reproduceAudio(int selection, int selection1){
+        return consumers.get(selection-1).reproduce((Reproducible) audios.get(selection1-1));
     }
 
 }

@@ -46,8 +46,9 @@ public class Song extends Audio implements Sellable, Reproducible{
         this.genre = genre;
     }
 
-    public void sell() {
-
+    public Sellable sell() {
+        setNumSells(getNumSells()+1);
+        return Song.this;
     }
 
     public String reproduce() {

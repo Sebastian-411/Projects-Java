@@ -43,8 +43,36 @@ public class UserPremium extends UserConsumer{
         return playlists.add(playlist);
     }
 
-    public String reproduce() {
-        return null;
+
+    @Override
+    public String reproduce(Reproducible audio) {
+        String msg = "";
+        boolean found = true;
+        Reproducible tmp = audio;
+        if(tmp instanceof Audio){
+            ((Audio) tmp).setNumReproductions(1);
+            if(!reproduced.isEmpty()){
+                for (int i = 0; (i < reproduced.size() + 1) && found; i++){
+                    if ( i == reproduced.size() ){
+                        reproduced.add(tmp);
+                    } else {
+                        if ( reproduced.get(i) instanceof Audio ){
+                            if ( ((Audio) reproduced.get(i)).getName().equals(((Audio) tmp).getName()) ){
+                                ((Audio) reproduced.get(i)).setNumReproductions(((Audio) reproduced.get(i)).getNumReproductions() + 1);
+                                found = false;
+                            }
+                        }
+                    }
+                }
+            } else {
+                reproduced.add(tmp);
+            }
+            msg += "Playing " + ((Audio) tmp).getName();
+        }
+        if ( msg.equals("")  ){
+            System.out.println("An error has occurred");
+        }
+        return msg;
     }
 
     public String advertisable() {
