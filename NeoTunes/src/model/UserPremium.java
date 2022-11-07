@@ -9,6 +9,7 @@ public class UserPremium extends UserConsumer{
 
     public UserPremium(String name, String id, Date date) {
         super(name, id, date);
+        playlists = new ArrayList<>();
     }
 
     public ArrayList<Purchase> getPurchases() {
@@ -27,7 +28,7 @@ public class UserPremium extends UserConsumer{
         this.playlists = playlists;
     }
 
-    public Boolean addPlaylist(Playlist playlist) {
+    public boolean addPlaylist(Playlist playlist) {
         return playlists.add(playlist);
     }
 

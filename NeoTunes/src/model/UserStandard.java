@@ -28,7 +28,7 @@ public class UserStandard extends UserConsumer implements Advertisable{
         this.playlists = playlists;
     }
 
-    public Boolean addPlaylist(Playlist playlist) {
+    public boolean addPlaylist(Playlist playlist) {
         for(int i =  0; i<playlists.length; i++){
             if(playlists[i]==null){
                 playlists[i] = playlist;

@@ -25,7 +25,8 @@ public class NeoTunesManager {
                     + "\n 1. Register an user"
                     + "\n 2. Register an audio"
                     + "\n 3. Create a playlist"
-                    + "\n 4. Edit a playlist");
+                    + "\n 4. Edit a playlist"
+                    + "\n 5. Share a playlist");
             switch (intAnswer()){
                 case 1:
                     registerUser();
@@ -39,12 +40,42 @@ public class NeoTunesManager {
                 case 4:
                     editPlaylist();
                     break;
+                case 5:
+                    sharePlaylist();
+                    break;
                 case 7:
                     System.exit(0);
             }
         }
     }
 
+    public void sharePlaylist(){
+        System.out.println("What could we help you?"
+                + "\n 1. Share a playlist"
+                + "\n 2. View a playlist");
+        switch (intAnswer()){
+            case 1:
+                System.out.println("Please, select the user that will share the playlist");
+                System.out.println(controller.getAllUserConsumers());
+                int selection = intAnswer();
+                if(controller.getUserPlaylists(selection).equals("")){
+                    System.out.println("The user has no playlist");
+                } else {
+                    System.out.println(controller.getUserPlaylists(selection));
+                    System.out.println("Please, select the playlist");
+                    int selection1 = intAnswer();
+                    System.out.println(controller.getUserPlaylistCode(selection, selection1));
+                }
+                break;
+            case 2:
+                System.out.println("Please, enter the playlist's code");
+                System.out.println(controller.getPlaylistToCode(sc.nextLine()));
+                break;
+            default:
+                System.out.println("Enter a valid option");
+        }
+        menu();
+    }
     public void editPlaylist(){
         if(!controller.getAllUserConsumers().equals("")){
             System.out.println("Please, select the user that make this playlist");
@@ -200,7 +231,8 @@ public class NeoTunesManager {
                             control = true;
                         } else {
                             control = false;
-                            if (controller.registerPlayList(selection, name, selections)){
+                            if (!controller.registerPlayList(selection, name, selections).equals("")){
+                                System.out.println(controller.registerPlayList(selection, name, selections));
                                 System.out.println("The play was created successfully");
                             } else {
                                 System.out.println("An error has occurred, try again later");

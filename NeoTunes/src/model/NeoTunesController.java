@@ -15,7 +15,7 @@ public class NeoTunesController {
         consumers = new ArrayList<UserConsumer>();
         producers = new ArrayList<UserProducer>();
         audios = new ArrayList<Audio>();
-        consumers.add(new UserStandard("Juan", "222", new Date()));
+        consumers.add(new UserPremium("Juan", "222", new Date()));
         producers.add(new UserArtist("Juan", "222", new Date(), "asdasdas"));
 
     }
@@ -72,10 +72,23 @@ public class NeoTunesController {
         return false;
     }
 
-    public boolean registerPlayList(int selection, String name, ArrayList<Integer> selections){
+    public int[][] generateMatriz(){
+        int rows = 6;
+        int columns = 6;
+        int[][] tmp = new int[rows][columns];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                tmp[i][j] = rd.nextInt(10);
+            }
+        }
+        return tmp;
+    }
+
+    public String registerPlayList(int selection, String name, ArrayList<Integer> selections){
         ArrayList<Audio> temp = new ArrayList<>();
         boolean hasSong = false;
         boolean hasPodcast = false;
+        int[][] tmp = generateMatriz();
         for(int i = 0; i<selections.size(); i++){
             temp.add(audios.get(selections.get(i)-1));
             hasSong = ((audios.get(selections.get(i) - 1) instanceof Song) || hasSong);
@@ -83,26 +96,20 @@ public class NeoTunesController {
         }
         int caseCode = (hasSong && hasPodcast) ? 3 : hasSong ? 2 : hasPodcast ? 1 : 4;
         if (caseCode== 4){
-            return false;
-        }
-        Playlist temp1 = new Playlist(name, generateCodePlaylist(caseCode));
-        temp1.setAudios(temp);
-        return (consumers.get(selection-1)).addPlaylist(temp1);
-    }
-
-    public String generateCodePlaylist(int caseCode){
-        int number = 0;
-        int rows = 6;
-        int columns = 6;
-        int[][] tmp = new int[rows][columns];
-        String msg = "";
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                tmp[i][j] = rd.nextInt(10);
+            return "";
+        } else {
+            Playlist temp1 = new Playlist(name, generateCodePlaylist(caseCode, tmp));
+            temp1.setAudios(temp);
+            if ( (consumers.get(selection - 1)).addPlaylist(temp1) ){
+                return getMatriz(tmp) + "\n Code generation... \n" + generateCodePlaylist(caseCode, tmp);
+            } else {
+                return "";
             }
         }
+    }
 
+    public String generateCodePlaylist(int caseCode,int[][] tmp){
+        String msg = "";
         switch (caseCode){
             case 1:
                 for(int i = 0; i<tmp.length/2; i++){
@@ -139,6 +146,16 @@ public class NeoTunesController {
                     }
                 }
                 break;
+        }
+        return msg;
+    }
+    public String getMatriz(int[][] tmp){
+        String msg = "";
+        for (int i = 0; i < tmp.length; i++) { // filas numbers.length
+            for (int j = 0; j < tmp[0].length; j++) { // columnas numbers[0].length
+                msg += tmp[i][j] + " ";
+            }
+            msg += "\n";
         }
         return msg;
     }
@@ -244,6 +261,41 @@ public class NeoTunesController {
         return msg;
     }
 
+    public String getUserPlaylistCode(int selection, int selection1){
+        String msg = "";
+        if(consumers.get(selection-1) instanceof UserPremium){
+            return ((UserPremium) consumers.get(selection-1)).getPlaylists().get(selection1-1).getCode();
+        }
+        if(consumers.get(selection-1) instanceof UserStandard){
+            return ((UserStandard) consumers.get(selection-1)).getPlaylists()[selection1-1].getCode();
+
+        }
+        return msg;
+    }
+
+    public String getPlaylistToCode(String code){
+        String msg = "";
+        for  (int i = 0; i<consumers.size(); i++){
+            if(consumers.get(i) instanceof UserStandard){
+                for(int j = 0; j<((UserStandard) consumers.get(i)).getPlaylists().length; j++)
+                    if(((UserStandard) consumers.get(i)).getPlaylists()[j] != null){
+                        if ( (((UserStandard) consumers.get(i)).getPlaylist(j).getCode()).equals(code) ){
+                            return getUserPlaylist((i + 1), (j + 1));
+                        }
+                    } else {
+                        return "";
+                    }
+            }
+            if(consumers.get(i) instanceof UserPremium){
+                for(int j = 0; j<((UserPremium) consumers.get(i)).getPlaylists().size(); j++)
+                    if ( ((((UserPremium) consumers.get(i)).getPlaylists().get(j)).getCode()).equals(code) ){
+                        return getUserPlaylist((i + 1), (j + 1));
+                    }
+            }
+        }
+        return msg = "";
+    }
+
     public String getUserPlaylist(int selection, int selection1){
         String msg = "";
         if(consumers.get(selection-1) instanceof UserPremium){
@@ -282,16 +334,31 @@ public class NeoTunesController {
     }
 
     public boolean registerAudiotoPlaylist(int selection, int selection1, ArrayList<Integer> selections){
+        ArrayList<Audio> tmp;
+        boolean hasSong = false;
+        boolean hasPodcast = false;
         boolean temp = true;
         if(consumers.get(selection-1) instanceof UserPremium){
             for (int i = 0; i < selections.size(); i++){
                 temp = temp && ((UserPremium) consumers.get(selection - 1)).getPlaylists().get(selection1 - 1).getAudios().add(audios.get(selections.get(i) - 1));
             }
+            tmp = ((UserPremium) consumers.get(selection - 1)).getPlaylists().get(selection1 - 1).getAudios();
+            for(int i = 0; i<tmp.size(); i++){
+                hasSong = ((audios.get(i) instanceof Song) || hasSong);
+                hasPodcast = ((audios.get(i) instanceof Podcast) || hasPodcast);
+            }
+            ((UserPremium) consumers.get(selection - 1)).getPlaylists().get(selection1 - 1).setCode(generateCodePlaylist(hasSong && hasPodcast ? 3 : hasSong ? 2 : hasPodcast ? 1 : 4, generateMatriz()));
         }
         if(consumers.get(selection-1) instanceof UserStandard){
             for (int i = 0; i < selections.size(); i++){
                 temp = temp &&  ((UserStandard) consumers.get(selection-1)).getPlaylists()[selection1-1].getAudios().add(audios.get(selections.get(i)-1));
             }
+            tmp = ((UserStandard) consumers.get(selection-1)).getPlaylists()[selection1-1].getAudios();
+            for(int i = 0; i<tmp.size(); i++){
+                hasSong = ((audios.get(i) instanceof Song) || hasSong);
+                hasPodcast = ((audios.get(i) instanceof Podcast) || hasPodcast);
+            }
+            ((UserStandard) consumers.get(selection-1)).getPlaylists()[selection1-1].setCode(generateCodePlaylist(hasSong && hasPodcast ? 3 : hasSong ? 2 : hasPodcast ? 1 : 4, generateMatriz()));
         }
         return temp;
     }
