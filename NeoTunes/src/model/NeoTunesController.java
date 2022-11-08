@@ -524,4 +524,34 @@ public class NeoTunesController {
         return consumers.get(selection-1).reproduce((Reproducible) audios.get(selection1-1));
     }
 
+    public boolean canBuySong(int selection){
+        switch ((consumers.get(selection-1) instanceof UserPremium) ? 1 : (consumers.get(selection-1) instanceof UserStandard) ? 2 : 3){
+            case 1:
+                return true;
+            case 2:
+                Purchase[] temp = ((UserStandard) consumers.get(selection-1)).getPurchases();
+                for(int i =  0; i<temp.length; i++){
+                    if(temp[i]==null){
+                        return true;
+                    }
+                }
+        }
+        return false;
+    }
+
+    public boolean buySong(int selection, int selection1){
+        Purchase sell = new Purchase(new Date(), (((Song) audios.get(selection1-1)).sell()));
+        if ( consumers.get(selection-1) instanceof UserPremium ){
+            return ((UserPremium) consumers.get(selection-1)).getPurchases().add(sell);
+        }
+        if ( consumers.get(selection-1) instanceof UserStandard ){
+            for(int i = 0; i<((UserStandard) consumers.get(selection-1)).getPurchases().length; i++)
+                if(((UserStandard) consumers.get(selection-1)).getPurchases()[i] == null){
+                    ((UserStandard) consumers.get(selection-1)).getPurchases()[i] = sell;
+                    return true;
+                }
+        }
+        return false;
+    }
+
 }

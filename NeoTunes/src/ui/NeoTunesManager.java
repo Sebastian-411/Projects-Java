@@ -32,7 +32,8 @@ public class NeoTunesManager {
                     + "\n 3. Create a playlist"
                     + "\n 4. Edit a playlist"
                     + "\n 5. Share a playlist"
-                    + "\n 6. Simulate the playing of a song or podcast");
+                    + "\n 6. Simulate the playing of a song or podcast"
+                    + "\n 7. Buy a song");
             switch (intAnswer()){
                 case 1:
                     registerUser();
@@ -53,15 +54,35 @@ public class NeoTunesManager {
                     simulatePlaying();
                     break;
                 case 7:
+                    buySong();
+                    break;
+                case 10:
                     System.exit(0);
             }
         }
     }
 
-
-    public void simulatePlaying(){
+    public void buySong(){
         System.out.println("Please, select the user that will reproduce");
         if(!controller.getAllUserConsumers().equals("")){
+            System.out.println(controller.getAllUserConsumers());
+            int selection = intAnswer();
+            if ( controller.canBuySong(selection) ){
+                System.out.println("Please, select the song to buy");
+                System.out.println(controller.getAllSongs());
+                int selection1 = intAnswer();
+                controller.buySong(selection, selection1);
+            } else {
+                System.out.println("Sorry, this user cannot make any more purchases.");
+            }
+        } else{
+            System.out.println("Please, register an user");
+        }
+    }
+
+    public void simulatePlaying(){
+        if(!controller.getAllUserConsumers().equals("")){
+            System.out.println("Please, select the user that will reproduce");
             System.out.println(controller.getAllUserConsumers());
             int selection = intAnswer();
             String msg = "";

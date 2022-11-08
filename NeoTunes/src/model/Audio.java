@@ -62,7 +62,7 @@ public abstract class Audio {
         return "Audio" +
                 "\n Name: " + name +
                 "\n Url: " + url +
-                "\n Duration: " + duration +
+                "\n Duration: " + ((int) duration/60) + ":" + ((int) duration%60) +
                 "\n Number of reproductions: " + numReproductions;
     }
 }
