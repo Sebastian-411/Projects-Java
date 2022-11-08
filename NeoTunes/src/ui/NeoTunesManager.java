@@ -78,6 +78,7 @@ public class NeoTunesManager {
         } else{
             System.out.println("Please, register an user");
         }
+
     }
 
     public void simulatePlaying(){
