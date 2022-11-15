@@ -273,6 +273,7 @@ public class NeoTunesManager {
                 System.out.println("The user can not create more playlist");
                 menu();
             } else {
+                System.out.println(controller.getUserPlaylists(selection));
                 System.out.println("Please, enter the playlist's name");
                 String name = sc.nextLine();
                 System.out.println("Please, add the audios to the playlist");
@@ -316,9 +317,9 @@ public class NeoTunesManager {
                         if ( intAnswer() == 1 ){
                             control = true;
                         } else {
-                            control = false;
-                            if (!controller.registerPlayList(selection, name, selections).equals("")){
-                                System.out.println(controller.registerPlayList(selection, name, selections));
+                            String tmsg = controller.registerPlayList(selection, name, selections);
+                            if (!tmsg.equals("")){
+                                System.out.println(tmsg);
                                 System.out.println("The play was created successfully");
                             } else {
                                 System.out.println("An error has occurred, try again later");

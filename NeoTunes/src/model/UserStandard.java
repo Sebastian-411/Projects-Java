@@ -63,21 +63,21 @@ public class UserStandard extends UserConsumer implements Advertisable{
         Reproducible tmp = audio;
         if(tmp instanceof Audio){
             ((Audio) tmp).setNumReproductions(1);
-            if(!reproduced.isEmpty()){
-                for (int i = 0; (i < reproduced.size() + 1) && found; i++){
-                    if ( i == reproduced.size() ){
-                        reproduced.add(tmp);
+            if(!getReproduced().isEmpty()){
+                for (int i = 0; (i < getReproduced().size() + 1) && found; i++){
+                    if ( i == getReproduced().size() ){
+                        getReproduced().add(tmp);
                     } else {
-                        if ( reproduced.get(i) instanceof Audio ){
-                            if ( ((Audio) reproduced.get(i)).getName().equals(((Audio) tmp).getName()) ){
-                                ((Audio) reproduced.get(i)).setNumReproductions(((Audio) reproduced.get(i)).getNumReproductions() + 1);
+                        if ( getReproduced().get(i) instanceof Audio ){
+                            if ( ((Audio) getReproduced().get(i)).getName().equals(((Audio) tmp).getName()) ){
+                                ((Audio) getReproduced().get(i)).setNumReproductions(((Audio) getReproduced().get(i)).getNumReproductions() + 1);
                                 found = false;
                             }
                         }
                     }
                 }
             } else {
-                reproduced.add(tmp);
+                getReproduced().add(tmp);
             }
             if(tmp instanceof Podcast){
                 msg += advertisable();
