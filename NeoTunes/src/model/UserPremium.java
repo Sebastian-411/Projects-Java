@@ -10,6 +10,7 @@ public class UserPremium extends UserConsumer{
     public UserPremium(String name, String id, Date date) {
         super(name, id, date);
         playlists = new ArrayList<>();
+        purchases = new ArrayList<>();
     }
 
     public ArrayList<Purchase> getPurchases() {
@@ -45,34 +46,41 @@ public class UserPremium extends UserConsumer{
 
 
     @Override
-    public String reproduce(Reproducible audio) {
+    public String reproduce(Audio tmp) {
+        int i = 0;
         String msg = "";
         boolean found = true;
-        Reproducible tmp = audio;
-        if(tmp instanceof Audio){
-            ((Audio) tmp).setNumReproductions(1);
             if(!getReproduced().isEmpty()){
-                for (int i = 0; (i < getReproduced().size() + 1) && found; i++){
-                    if ( i == getReproduced().size() ){
-                        getReproduced().add(tmp);
-                    } else {
-                        if ( getReproduced().get(i) instanceof Audio ){
-                            if ( ((Audio) getReproduced().get(i)).getName().equals(((Audio) tmp).getName()) ){
-                                ((Audio) getReproduced().get(i)).setNumReproductions(((Audio) getReproduced().get(i)).getNumReproductions() + 1);
+                for (i = 0; (i < getReproduced().size()) && found; i++){
+                    if ( getReproduced().get(i) instanceof Audio ){
+                            if (getReproduced().get(i).equals(tmp)){
+                                getReproduced().get(i).reproduce();
                                 found = false;
                             }
                         }
                     }
+                }else {
+                if(tmp instanceof Song){
+                    getReproduced().add(((Song) tmp).clones());
                 }
-            } else {
-                getReproduced().add(tmp);
+                if(tmp instanceof Podcast){
+                    getReproduced().add(((Podcast) tmp).clones());
+                }
+                msg += "Playing " + (tmp).getName();
             }
-            msg += "Playing " + ((Audio) tmp).getName();
-        }
-        if ( msg.equals("")  ){
-            System.out.println("An error has occurred");
-        }
-        return msg;
+            if ( !found ){
+                if(tmp instanceof Song){
+                    getReproduced().add(((Song) tmp).clones());
+                }
+                if(tmp instanceof Podcast){
+                    getReproduced().add(((Podcast) tmp).clones());
+                }
+                msg += "Playing " + (tmp).getName();
+            }
+            if ( msg.equals("")  ){
+                msg = ("An error has occurred");
+            }
+            return msg;
     }
 
 }

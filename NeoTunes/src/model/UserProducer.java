@@ -38,6 +38,8 @@ public abstract class UserProducer extends User{
         this.url = url;
     }
 
+    public abstract void refresh();
+
     @Override
     public String toString() {
         return "UserProducer" +

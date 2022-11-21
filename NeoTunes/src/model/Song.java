@@ -51,10 +51,9 @@ public class Song extends Audio implements Sellable, Reproducible{
         return Song.this;
     }
 
-    public String reproduce() {
-        return null;
+    public Song clones() {
+        return new Song(getName(), Album, genre, getUrl(), getDuration(), price);
     }
-
 
     @Override
     public String toString() {

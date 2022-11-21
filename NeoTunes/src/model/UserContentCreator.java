@@ -9,6 +9,21 @@ public class UserContentCreator extends UserProducer{
         super(name, id, date, url);
         podcasts = new ArrayList<Podcast>();
     }
+    public void refresh() {
+        int x = 0;
+        for(int i = 0; podcasts.size()>i; i++){
+            x += podcasts.get(i).getNumReproductions();
+        }
+        setNumReproduction(x);
+    }
+
+    public ArrayList<Podcast> getPodcasts() {
+        return podcasts;
+    }
+
+    public void setPodcasts(ArrayList<Podcast> podcasts) {
+        this.podcasts = podcasts;
+    }
 
     /** Description:
      *          This method will take care of adding a podcast to the user.

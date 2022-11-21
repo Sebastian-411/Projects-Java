@@ -17,4 +17,5 @@ public abstract class UserConsumer extends User implements Playable{
     public void setReproduced(ArrayList<Reproducible> reproduced) {
         this.reproduced = reproduced;
     }
+
 }

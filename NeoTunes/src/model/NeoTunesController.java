@@ -15,9 +15,138 @@ public class NeoTunesController {
         consumers = new ArrayList<UserConsumer>();
         producers = new ArrayList<UserProducer>();
         audios = new ArrayList<Audio>();
-        consumers.add(new UserStandard("Juan", "222", new Date()));
-        producers.add(new UserArtist("Juan", "222", new Date(), "asdasdas"));
+    }
 
+    public String bestContentCreator(int amount){
+        boolean control = false;
+        String msg = "";
+        UserContentCreator[] best = new UserContentCreator[amount];
+        for (int x = 0; x < best.length; x++){
+            for (int i = 0; i < producers.size(); i++){
+                if( producers.get(i) instanceof UserContentCreator){
+                    for(int y = 0; y< best.length; y++){
+                        if(best[y] != null){
+                            control = control || !((producers.get(i) + producers.get(i).getId()).equals(best[y].getName() + best[y].getId()));
+                        }
+                    }
+                    if ( !control ){
+                        if ( best[x] == null ){
+                            best[x] = (UserContentCreator) producers.get(i);
+                        } else {
+                            if ( producers.get(i).getNumReproduction() > best[x].getNumReproduction() ){
+                                best[x] = (UserContentCreator) producers.get(i);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int x = 0; x<best.length; x++){
+            if(best[x]!=null){
+                msg += "\n " + (x + 1) + ". " + best[x].getName() + ". Reproduction: " + best[x].getNumReproduction();
+            }
+        }
+        return msg;
+    }
+
+    public String bestArtist(int amount){
+        boolean control = false;
+        String msg = "";
+        UserArtist[] best = new UserArtist[amount];
+        for (int x = 0; x < best.length; x++){
+            for (int i = 0; i < producers.size(); i++){
+                if( producers.get(i) instanceof UserArtist){
+                    for(int y = 0; y< best.length; y++){
+                        if(best[y] != null){
+                            control = control || !((producers.get(i) + producers.get(i).getId()).equals(best[y].getName() + best[y].getId()));
+                        }
+                    }
+                    if ( !control ){
+                        if ( best[x] == null ){
+                            best[x] = (UserArtist) producers.get(i);
+                        } else {
+                            if ( producers.get(i).getNumReproduction() > best[x].getNumReproduction() ){
+                                best[x] = (UserArtist) producers.get(i);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int x = 0; x<best.length; x++){
+            if(best[x]!=null){
+                msg += "\n " + (x + 1) + ". " + best[x].getName() + ". Reproduction: " + best[x].getNumReproduction();
+            }
+        }
+        return msg;
+    }
+
+    public String bestSong(int amount){
+        boolean control = false;
+        String msg = "";
+        Song[] best = new Song[amount];
+        for (int x = 0; x < best.length; x++){
+            for (int i = 0; i < audios.size(); i++){
+                if( audios.get(i) instanceof Song){
+                    for(int y = 0; y< best.length; y++){
+                        if(best[y] != null){
+                            control = control || !((audios.get(i) + audios.get(i).getUrl()).equals(best[y].getName() + best[y].getUrl()));
+                        }
+                    }
+                    if ( control ){
+                        if ( best[x] == null ){
+                            best[x] = (Song) audios.get(i);
+                        } else {
+                            if ( audios.get(i).getNumReproductions() > best[x].getNumReproductions() ){
+                                best[x] = (Song) audios.get(i);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int x = 0; x<best.length; x++){
+            if(best[x]!=null){
+                msg += "\n " + (x + 1) + ". " + best[x].getName() + ". Reproduction: " + best[x].getNumReproductions();
+            }
+        }
+        return msg;
+    }
+
+    public String bestPodcast(int amount){
+        boolean control = false;
+        String msg = "";
+        Podcast[] best = new Podcast[amount];
+        for (int x = 0; x < best.length; x++){
+            for (int i = 0; i < audios.size(); i++){
+                if( audios.get(i) instanceof Podcast){
+                    for(int y = 0; y< best.length; y++){
+                        if(best[y] != null){
+                            control = control || !((audios.get(i) + audios.get(i).getUrl()).equals(best[y].getName() + best[y].getUrl()));
+                        }
+                    }
+                    if ( control ){
+                        if ( best[x] == null ){
+                            best[x] = (Podcast) audios.get(i);
+                        } else {
+                            if ( audios.get(i).getNumReproductions() > best[x].getNumReproductions() ){
+                                best[x] = (Podcast) audios.get(i);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int x = 0; x<best.length; x++){
+            if(best[x]!=null){
+                msg += "\n " + (x + 1) + ". " + best[x].getName() + ". Reproduction: " + best[x].getNumReproductions();
+            }
+        }
+        return msg;
     }
 
     /** Description:
@@ -73,7 +202,7 @@ public class NeoTunesController {
         if(!(producers.get(selection-1) instanceof UserArtist)){
             return false;
         }
-        return audios.add(temp)||(((UserArtist) producers.get(selection-1)).addSong(temp));
+        return audios.add(temp)&&(((UserArtist) producers.get(selection-1)).addSong(temp));
     }
 
     /**
@@ -100,7 +229,7 @@ public class NeoTunesController {
         if(!(producers.get(selection-1) instanceof UserContentCreator)){
             return false;
         }
-        return audios.add(temp)||(((UserContentCreator) producers.get(selection-1)).addPodcast(temp));
+        return audios.add(temp)&&(((UserContentCreator) producers.get(selection-1)).addPodcast(temp));
     }
 
     /** Description:
@@ -521,7 +650,8 @@ public class NeoTunesController {
     }
 
     public String reproduceAudio(int selection, int selection1){
-        return consumers.get(selection-1).reproduce((Reproducible) audios.get(selection1-1));
+        audios.get(selection1-1).reproduce();
+        return consumers.get(selection-1).reproduce((Audio) audios.get(selection1-1));
     }
 
     public boolean canBuySong(int selection){
@@ -529,9 +659,8 @@ public class NeoTunesController {
             case 1:
                 return true;
             case 2:
-                Purchase[] temp = ((UserStandard) consumers.get(selection-1)).getPurchases();
-                for(int i =  0; i<temp.length; i++){
-                    if(temp[i]==null){
+                for(int i =  0; i<((UserStandard) consumers.get(selection-1)).getPurchases().length; i++){
+                    if(((UserStandard) consumers.get(selection-1)).getPurchases()[i]==null){
                         return true;
                     }
                 }
@@ -539,10 +668,18 @@ public class NeoTunesController {
         return false;
     }
 
+    public String totalReproductions(int selection){
+        try{
+            return audios.get(selection - 1).getName() + ", reproductions " + audios.get(selection - 1).getNumReproductions();
+        } catch(Exception e){
+            return "Error";
+        }
+    }
     public boolean buySong(int selection, int selection1){
         Purchase sell = new Purchase(new Date(), (((Song) audios.get(selection1-1)).sell()));
         if ( consumers.get(selection-1) instanceof UserPremium ){
-            return ((UserPremium) consumers.get(selection-1)).getPurchases().add(sell);
+            boolean st = ((UserPremium) consumers.get(selection-1)).getPurchases().add(sell);
+            return st;
         }
         if ( consumers.get(selection-1) instanceof UserStandard ){
             for(int i = 0; i<((UserStandard) consumers.get(selection-1)).getPurchases().length; i++)
@@ -552,6 +689,167 @@ public class NeoTunesController {
                 }
         }
         return false;
+    }
+
+    public void refresh(){
+        for(int i = 0; i<producers.size(); i++){
+            producers.get(i).refresh();
+        }
+    }
+
+    public String sellGenre(int selection){
+        String msg = "";
+        Genre tmp = Genre.values()[selection-1];
+        int totalSells = 0;
+        int amountSells = 0;
+        for(int i = 0; i<audios.size(); i++){
+            if ( audios.get(i) instanceof Song){
+                if (((Song) audios.get(i)).getGenre().equals(tmp)){
+                    amountSells += (((Song) audios.get(i)).getNumSells());
+                    totalSells += (((Song) audios.get(i)).getNumSells()*((Song) audios.get(i)).getPrice());
+                }
+            }
+        }
+        if (totalSells != 0){
+            msg += "The genre " + (String.valueOf(tmp)).toLowerCase() + " has " + amountSells + " sells and " + totalSells + "$";
+        } else {
+            msg += "The genre has not sells";
+        }
+        return msg;
+    }
+
+    public String songMostSell(){
+        String msg = "";
+        Audio tmp = null;
+        for(int i = 0; i<audios.size(); i++){
+            if ( audios.get(i) instanceof Song ){
+                if (tmp == null){
+                    tmp = audios.get(i);
+                } else {
+                    if (((Song) tmp).getNumSells()<((Song) audios.get(i)).getNumSells()){
+                        tmp = audios.get(i);
+                    }
+                }
+            }
+        }
+        if(tmp == null){
+            msg = "Neotunes has not sells";
+        } else {
+            msg = tmp.getName() + " has " + ((Song) tmp).getNumSells() + " sells with a price " + ((Song) tmp).getPrice() + "$";
+        }
+        return msg;
+    }
+
+    public String genreMostListened(){
+
+        String msg = "";
+        Genre tmp = null;
+        int tmp1 = 0;
+        int tmp2 = 0;
+        for (int j = 0; j<Genre.values().length; j++){
+            tmp2 = 0;
+            for (int i = 0; i < audios.size(); i++){
+                if ( audios.get(i) instanceof Song ){
+                    if (((Song) audios.get(i)).getGenre().equals(Genre.values()[j])){
+                        tmp2 += audios.get(i).getNumReproductions();
+                    }
+                }
+            }
+            if(tmp1 < tmp2){
+                tmp = Genre.values()[j];
+                tmp1 = tmp2;
+            }
+        }
+        if (tmp == null){
+            msg = "No reproductions found";
+        } else {
+            msg = "The genre most reproduced is " + String.valueOf(tmp).toLowerCase() + " with " + tmp1 + " reproductions";
+        }
+        return msg;
+    }
+
+    public String genreMostListenedUser(int selection){
+        ArrayList<Reproducible> tmp4 = consumers.get(selection-1).getReproduced();
+        String msg = "";
+        Genre tmp = null;
+        int tmp1 = 0;
+        int tmp2;
+        for (int j = 0; j<Genre.values().length; j++){
+            tmp2 = 0;
+            for (int i = 0; i < tmp4.size(); i++){
+                if ( tmp4.get(i) instanceof Song ){
+                    if (((Song) tmp4.get(i)).getGenre().equals(Genre.values()[j])){
+                        tmp2 += ((Song) tmp4.get(i)).getNumReproductions();
+                    }
+                }
+            }
+            if(tmp1 < tmp2){
+                tmp = Genre.values()[j];
+                tmp1 = tmp2;
+            }
+        }
+        if (tmp == null){
+            msg = "No reproductions found";
+        } else {
+            msg = "The genre most reproduced is " + String.valueOf(tmp).toLowerCase() + " with " + tmp1 + " reproductions";
+        }
+        return msg;
+    }
+
+    public String categoryMostListened(){
+
+        String msg = "";
+        Category tmp = null;
+        int tmp1 = 0;
+        int tmp2 = 0;
+        for (int j = 0; j<Category.values().length; j++){
+            tmp2 = 0;
+            for (int i = 0; i < audios.size(); i++){
+                if ( audios.get(i) instanceof Podcast ){
+                    if (((Podcast) audios.get(i)).getCategory().equals(Category.values()[j])){
+                        tmp2 += audios.get(i).getNumReproductions();
+                    }
+                }
+            }
+            if(tmp1 < tmp2){
+                tmp = Category.values()[j];
+                tmp1 = tmp2;
+            }
+        }
+        if (tmp == null){
+            msg = "No reproductions found";
+        } else {
+            msg = "The genre most reproduced is " + String.valueOf(tmp).toLowerCase() + " with " + tmp1 + " reproductions";
+        }
+        return msg;
+    }
+
+    public String categoryMostListened(int selection){
+        ArrayList<Reproducible> tmp4 = consumers.get(selection-1).getReproduced();
+        String msg = "";
+        Category tmp = null;
+        int tmp1 = 0;
+        int tmp2 = 0;
+        for (int j = 0; j<Category.values().length; j++){
+            tmp2 = 0;
+            for (int i = 0; i < tmp4.size(); i++){
+                if ( tmp4.get(i) instanceof Podcast ){
+                    if (((Podcast) tmp4.get(i)).getCategory().equals(Category.values()[j])){
+                        tmp2 += ((Podcast)(tmp4.get(i))).getNumReproductions();
+                    }
+                }
+            }
+            if(tmp1 < tmp2){
+                tmp = Category.values()[j];
+                tmp1 = tmp2;
+            }
+        }
+        if (tmp == null){
+            msg = "No reproductions found";
+        } else {
+            msg = "The genre most reproduced is " + String.valueOf(tmp).toLowerCase() + " with " + tmp1 + " reproductions";
+        }
+        return msg;
     }
 
 }

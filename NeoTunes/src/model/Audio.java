@@ -48,6 +48,10 @@ public abstract class Audio {
         this.numReproductions = numReproductions;
         setTimeReproduced(this.numReproductions * this.duration);
     }
+    public void reproduce() {
+        setNumReproductions(getNumReproductions()+1);
+    }
+
 
     public double getTimeReproduced() {
         return timeReproduced;

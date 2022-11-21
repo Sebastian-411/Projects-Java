@@ -8,12 +8,13 @@ public class UserStandard extends UserConsumer implements Advertisable{
     private Purchase[] purchases;
     private Playlist[] playlists;
 
-    private int songReproduced = 0;
+    private int songReproduced;
 
     public UserStandard(String name, String id, Date date) {
         super(name, id, date);
         this.purchases = new Purchase[100];
         this.playlists = new Playlist[20];
+        songReproduced = 0;
     }
 
     public Purchase[] getPurchases() {
@@ -57,41 +58,47 @@ public class UserStandard extends UserConsumer implements Advertisable{
         return playlists[selection];
     }
 
-    public String reproduce(Reproducible audio) {
+    public String reproduce(Audio tmp) {
+        int i = 0;
         String msg = "";
         boolean found = true;
-        Reproducible tmp = audio;
-        if(tmp instanceof Audio){
-            ((Audio) tmp).setNumReproductions(1);
-            if(!getReproduced().isEmpty()){
-                for (int i = 0; (i < getReproduced().size() + 1) && found; i++){
-                    if ( i == getReproduced().size() ){
-                        getReproduced().add(tmp);
-                    } else {
-                        if ( getReproduced().get(i) instanceof Audio ){
-                            if ( ((Audio) getReproduced().get(i)).getName().equals(((Audio) tmp).getName()) ){
-                                ((Audio) getReproduced().get(i)).setNumReproductions(((Audio) getReproduced().get(i)).getNumReproductions() + 1);
-                                found = false;
-                            }
-                        }
+        if(!getReproduced().isEmpty()){
+            for (i = 0; (i < getReproduced().size()) && found; i++){
+                if ( getReproduced().get(i) instanceof Audio ){
+                    if (getReproduced().get(i).equals(tmp)){
+                        getReproduced().get(i).reproduce();
+                        found = false;
                     }
                 }
-            } else {
-                getReproduced().add(tmp);
+            }
+        }else {
+            if(tmp instanceof Song){
+                getReproduced().add(((Song) tmp).clones());
             }
             if(tmp instanceof Podcast){
-                msg += advertisable();
-                msg += "Playing " + ((Podcast) tmp).getName();
+                getReproduced().add(((Podcast) tmp).clones());
             }
-            if (tmp instanceof Song){
-                if ( songReproduced == 2 ){
-                    msg += "AD: " + advertisable();
-                    msg += "\n Now playing " + ((Song) tmp).getName();
-                    songReproduced = 0;
-                } else {
-                    msg += "Playing " + ((Song) tmp).getName();
-                    songReproduced ++;
-                }
+        }
+        if ( !found ){
+            if(tmp instanceof Song){
+                getReproduced().add(((Song) tmp).clones());
+            }
+            if(tmp instanceof Podcast){
+                getReproduced().add(((Podcast) tmp).clones());
+            }
+        }
+        if(tmp instanceof Podcast){
+            msg += advertisable();
+            msg += "Playing " + ((Podcast) tmp).getName();
+        }
+        if (tmp instanceof Song){
+            if ( songReproduced == 2 ){
+                msg += "AD: " + advertisable();
+                msg += "\n Now playing " + ((Song) tmp).getName();
+                songReproduced = 0;
+            } else {
+                msg += "Playing " + ((Song) tmp).getName();
+                songReproduced ++;
             }
         }
         if ( msg.equals("") ){

@@ -33,7 +33,8 @@ public class NeoTunesManager {
                     + "\n 4. Edit a playlist"
                     + "\n 5. Share a playlist"
                     + "\n 6. Simulate the playing of a song or podcast"
-                    + "\n 7. Buy a song");
+                    + "\n 7. Buy a song"
+                    + "\n 8. Neotunes Statistics ");
             switch (intAnswer()){
                 case 1:
                     registerUser();
@@ -56,29 +57,152 @@ public class NeoTunesManager {
                 case 7:
                     buySong();
                     break;
+                case 8:
+                    statistic();
                 case 10:
                     System.exit(0);
             }
         }
     }
 
-    public void buySong(){
-        System.out.println("Please, select the user that will reproduce");
-        if(!controller.getAllUserConsumers().equals("")){
-            System.out.println(controller.getAllUserConsumers());
-            int selection = intAnswer();
-            if ( controller.canBuySong(selection) ){
-                System.out.println("Please, select the song to buy");
-                System.out.println(controller.getAllSongs());
-                int selection1 = intAnswer();
-                controller.buySong(selection, selection1);
-            } else {
-                System.out.println("Sorry, this user cannot make any more purchases.");
+    public void statistic(){
+        controller.refresh();
+        if ( !controller.getAllAudios().equals("") && !controller.getAllUserProducer().equals("")){
+            System.out.println("Please, select the type of statistic"
+                                + "\n 1. Total plays of Neotunes content "
+                                + "\n 2. Most listened genre"
+                                + "\n 3. Most listened category"
+                                + "\n 4. Top 5 producers most listened "
+                                + "\n 5. Top 10 audios most listened"
+                                + "\n 6. songs sold and total sales value by genre."
+                                + "\n 7. Total number of sales and total sales value of the best-selling song");
+            switch (intAnswer()){
+                case 1:
+                    System.out.println("Select the Audio that you want to know the total reproductions");
+                    System.out.println(controller.getAllAudios());
+                    System.out.println(controller.totalReproductions(intAnswer()));
+                    break;
+                case 2:
+                    System.out.println("Please, select a option");
+                    System.out.println("Most listened genre in...");
+                    System.out.println("1. Neotunes"
+                                        + "\n 2. User");
+                    switch (intAnswer()){
+                        case 1:
+                            System.out.println(controller.genreMostListened());
+                            break;
+                        case 2:
+                            System.out.println(controller.getAllUserConsumers());
+                            System.out.println("Please, select a user");
+                            System.out.println(controller.genreMostListenedUser(intAnswer()));
+                            break;
+                        default:
+                            System.out.println("Please, try later");
+                            menu();
+                    }
+                    break;
+                case 3:
+                    System.out.println("Please, select a option");
+                    System.out.println("Most listened category in...");
+                    System.out.println("1. Neotunes"
+                            + "\n 2. User");
+                    switch (intAnswer()){
+                        case 1:
+                            System.out.println(controller.categoryMostListened());
+                            break;
+                        case 2:
+                            System.out.println(controller.getAllUserConsumers());
+                            System.out.println("Please, select a user");
+                            System.out.println(controller.categoryMostListened(intAnswer()));
+                            break;
+                        default:
+                            System.out.println("Please, try later");
+                            menu();
+                    }
+                    break;
+                case 4:
+                    System.out.println("Select the top 5 you want to know"
+                                        + "\n 1. Top 5 content creator"
+                                        + "\n 2. Top 5 artist");
+                    switch (intAnswer()){
+                        case 1:
+                            if(!controller.getAllContentCreator().equals("")){
+                                System.out.println(controller.bestContentCreator(5));
+                            } else {
+                                System.out.println("Please, register a content creator");
+                            }
+                            break;
+                        case 2:
+                            if(!controller.getAllArtist().equals("")){
+                                System.out.println(controller.bestArtist(5));
+                            } else {
+                                System.out.println("Please, register an artist");
+                            }
+                            break;
+                        default:
+                            System.out.println("Please, Try later");
+                            menu();
+                    }
+                    break;
+                case 5:
+                    System.out.println("Select the top 10 you want to know"
+                            + "\n 1. Top 10 songs"
+                            + "\n 2. Top 10 podcast");
+                    switch (intAnswer()){
+                        case 1:
+                            if(!controller.getAllSongs().equals("")){
+                                System.out.println(controller.bestSong(10));
+                            } else {
+                                System.out.println("Please, register a content creator");
+                            }
+                            break;
+                        case 2:
+                            if(!controller.getAllArtist().equals("")){
+                                System.out.println(controller.bestPodcast(10));
+                            } else {
+                                System.out.println("Please, register an artist");
+                            }
+                            break;
+                        default:
+                            System.out.println("Please, Try later");
+                            menu();
+                    }
+                    break;
+                case 6:
+                    System.out.println(controller.getGenre());
+                    System.out.println("Please, select a Genre");
+                    System.out.println(controller.sellGenre(intAnswer()));
+                    break;
+                case 7:
+                    System.out.println(controller.songMostSell());
             }
-        } else{
-            System.out.println("Please, register an user");
+            menu();
+        } else {
+            System.out.println("Please, register a audio");
+            menu();
         }
+    }
 
+    public void buySong(){
+        if(!controller.getAllSongs().equals("")){
+            System.out.println("Please, select the user that will reproduce");
+            if ( !controller.getAllUserConsumers().equals("") ){
+                System.out.println(controller.getAllUserConsumers());
+                int selection = intAnswer();
+                if ( controller.canBuySong(selection) ){
+                    System.out.println("Please, select the song to buy");
+                    System.out.println(controller.getAllSongs());
+                    int selection1 = intAnswer();
+                    controller.buySong(selection, selection1);
+                } else {
+                    System.out.println("Sorry, this user cannot make any more purchases.");
+                }
+            } else {
+                System.out.println("Please, register an user");
+            }
+        } else {
+            System.out.println("Please, register a song");
+        }
     }
 
     public void simulatePlaying(){
@@ -423,7 +547,7 @@ public class NeoTunesManager {
                 menu();
             }
         } else {
-            System.out.println("There are not user artist, please register one.");
+            System.out.println("There are not user creator content, please register one.");
             menu();
         }
     }

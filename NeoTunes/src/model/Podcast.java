@@ -25,9 +25,8 @@ public class Podcast extends Audio implements Reproducible{
         this.category = category;
     }
 
-    @Override
-    public String reproduce() {
-        return null;
+    public Podcast clones(){
+        return new Podcast(getName(), description, category, getUrl(), getDuration());
     }
 
     @Override
